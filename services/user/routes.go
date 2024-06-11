@@ -6,12 +6,6 @@ import (
 	"github.com/saddam-satria/posq-be/services/user/endpoints"
 )
 
-
-
-
-
-
-
-func UserRoute(route *fiber.App){
-	route.Get("/api/v1/me", middlewares.Authentication,endpoints.GetUserProfile)
+func UserRoute(route *fiber.App) {
+	route.Get("/api/v1/auth/me", middlewares.Authentication, endpoints.GetUserProfile)
 }

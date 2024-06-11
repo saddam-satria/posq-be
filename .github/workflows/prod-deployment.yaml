@@ -3,7 +3,8 @@ name: prod-deployment
 on:
   push:
     branches:
-      - main
+      - prod
+      - stagging
 
 jobs:
   deployment:

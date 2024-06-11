@@ -7,7 +7,7 @@ import (
 )
 
 type ProductVariant struct {
-	ProductVariantId uuid.UUID  `json:"userCredentialId" gorm:"column:productVariantId;type:uuid;primaryKey;default:gen_random_uuid()"`
+	ProductVariantId uuid.UUID  `json:"id" gorm:"column:productVariantId;type:uuid;primaryKey;default:gen_random_uuid()"`
 	Name             string     `json:"name" gorm:"column:name;type:varchar(255)"`
 	BasePrice        float32    `json:"base_price" gorm:"column:basePrice;type:decimal(10,2)"`
 	SalePrice        float32    `json:"sale_price" gorm:"column:salePrice;type:decimal(10,2)"`

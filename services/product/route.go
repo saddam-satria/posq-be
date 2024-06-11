@@ -8,4 +8,5 @@ import (
 
 func ProductRoute(route *fiber.App) {
 	route.Get("/api/v1/item", middlewares.Authentication, endpoints.GetProducts)
+	route.Get("/api/v1/item/:itemId/variants", middlewares.Authentication, endpoints.GetVariants)
 }

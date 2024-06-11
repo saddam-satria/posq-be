@@ -34,3 +34,7 @@ func GetProducts(filter string, order string, sort string, keyword string, resul
 	}).Find(&result)
 
 }
+
+func GetVariants(itemId string, result *[]models.ProductVariant) {
+	commons.DatabaseConnection.Model(&models.ProductVariant{}).Where(&models.ProductVariant{ProductId: itemId}).Find(&result)
+}

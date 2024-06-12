@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/saddam-satria/posq-be/commons"
+	"github.com/saddam-satria/posq-be/domains"
 	"github.com/saddam-satria/posq-be/models"
 	"github.com/saddam-satria/posq-be/repositories"
 )
@@ -19,15 +20,14 @@ func GetProducts(ctx *fiber.Ctx) error {
 	sortQuery := query["sort"]
 	keyword := query["keyword"]
 
+	code := fiber.StatusBadRequest
 	if order != "" && (order != "desc" && order != "asc") {
-		ctx.SendStatus(fiber.StatusBadRequest)
-		ctx.JSON(commons.GetResponse("order must contain asc or desc", fiber.StatusBadRequest, products))
+		ctx.Status(code).JSON(commons.GetResponse[any](commons.BAD_REQUEST[domains.En], code, nil))
 		return nil
 	}
 
 	if sortQuery != "" && (sortQuery != "name" && sortQuery != "price") {
-		ctx.SendStatus(fiber.StatusBadRequest)
-		ctx.JSON(commons.GetResponse("sort must name or price", fiber.StatusBadRequest, products))
+		ctx.Status(code).JSON(commons.GetResponse[any](commons.BAD_REQUEST[domains.En], code, nil))
 		return nil
 	}
 
@@ -60,8 +60,7 @@ func GetProducts(ctx *fiber.Ctx) error {
 		return products[i].Price < products[j].Price
 	})
 
-	ctx.SendStatus(fiber.StatusOK)
-	ctx.JSON(commons.GetResponse("success", fiber.StatusOK, products))
+	ctx.Status(fiber.StatusOK).JSON(commons.GetResponse("success", fiber.StatusOK, products))
 
 	return nil
 }

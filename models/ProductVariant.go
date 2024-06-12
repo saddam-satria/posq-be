@@ -20,6 +20,8 @@ type ProductVariant struct {
 	IsDeleted        bool       `json:"-" gorm:"default:false;column:isDeleted"`
 	IsAvailable      bool       `json:"is_available" gorm:"default:true;column:isAvailable"`
 	ProductId        string     `json:"item_id" gorm:"column:product_id;type:uuid"`
+
+	OrderProducts []OrderProduct `json:"items" gorm:"foreignKey:ProductVariantId"`
 }
 
 func (u ProductVariant) TableName() string {

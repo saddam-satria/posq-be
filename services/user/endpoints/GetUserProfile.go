@@ -2,6 +2,7 @@ package endpoints
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -19,7 +20,9 @@ func GetUserProfile(ctx *fiber.Ctx) error {
 
 	token := header.Authorization
 
-	parsedToken, _ := commons.VerifyToken(token)
+	tokenParsed := strings.Split(token, " ")
+
+	parsedToken, _ := commons.VerifyToken(tokenParsed[1])
 
 	userId := fmt.Sprintf("%v", parsedToken["id"])
 
@@ -27,10 +30,8 @@ func GetUserProfile(ctx *fiber.Ctx) error {
 
 	userUuid, _ := uuid.Parse(userId)
 
-	repositories.FindUserProfileByUserCredentialId(userUuid, &userProfile)
-
 	code := fiber.StatusNotFound
-	if userProfile.UserProfile == nil {
+	if err := repositories.FindUserProfileByUserCredentialId(userUuid, &userProfile); err != nil {
 		ctx.Status(code).JSON(commons.GetResponse[any](commons.NOT_FOUND[domains.En], code, nil))
 		return nil
 	}

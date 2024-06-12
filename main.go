@@ -34,8 +34,8 @@ func main() {
 	})
 
 	server.Use(recover.New())
-	server.Use(middlewares.BaseMiddleware)
-	utils.GetRoute(server)
+	router := server.Group("/api/v1", middlewares.BaseMiddleware)
+	utils.GetRoute(router)
 
 	if err := server.Listen(":" + utils.PORT); err != nil {
 		panic("Failed to run server" + err.Error())

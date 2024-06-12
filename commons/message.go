@@ -20,3 +20,7 @@ var SUCCESS map[domains.Lang]string = map[domains.Lang]string{
 	"id": "berhasil",
 	"en": "success",
 }
+var DUPLICATE_ENTRY map[domains.Lang]string = map[domains.Lang]string{
+	"id": "data sudah pernah digunakan",
+	"en": "data already exist",
+}

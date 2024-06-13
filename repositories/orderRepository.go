@@ -28,16 +28,16 @@ func Checkout(order *models.Order, response *apis.CheckoutResponse) error {
 	totalAmount := float32(0)
 
 	for index, variant := range productVariants {
-		if order.Products[index].ProductVariantId == variant.ProductVariantId.String() {
-			if order.Products[index].Quantity > variant.Stock {
-				db.Rollback()
-				return errors.New("run out of stock")
+		for _, requestVariant := range order.Products {
+			if requestVariant.ProductVariantId == variant.ProductVariantId.String() {
+				if requestVariant.Quantity > variant.Stock {
+					db.Rollback()
+					return errors.New("run out of stock")
+				}
+				currentStock := variant.Stock - requestVariant.Quantity
+				variant.Stock = currentStock
+				db.Save(variant)
 			}
-
-			currentStock := variant.Stock - order.Products[index].Quantity
-			variant.Stock = currentStock
-
-			db.Save(variant)
 		}
 		totalAmount += variant.BasePrice * float32(order.Products[index].Quantity)
 	}

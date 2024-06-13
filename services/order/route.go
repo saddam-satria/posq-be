@@ -7,4 +7,5 @@ import (
 
 func OrderRoute(route fiber.Router) {
 	route.Post("/order", endpoints.Checkout)
+	route.Get("/order/report", endpoints.GetOrders)
 }

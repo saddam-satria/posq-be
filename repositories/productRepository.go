@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/saddam-satria/posq-be/commons"
+	"github.com/saddam-satria/posq-be/domains/query"
 	"github.com/saddam-satria/posq-be/models"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -37,4 +38,12 @@ func GetProducts(filter string, order string, sort string, keyword string, resul
 
 func GetVariants(itemId string, result *[]models.ProductVariant) {
 	commons.DatabaseConnection.Model(&models.ProductVariant{}).Order("name asc").Where(&models.ProductVariant{ProductId: itemId}).Find(&result)
+}
+
+func CountProductOutStock(product *query.CountAggregate) {
+	commons.DatabaseConnection.Model(&models.ProductVariant{}).Select("count(*) AS total").Where("stock < 10").Find(&product)
+}
+
+func CountUnavailableService(product *query.CountAggregate) {
+	commons.DatabaseConnection.Model(&models.Product{}).Select("count(*) as total").Where("category = service").Where("IsAvailable = false").Find(&product)
 }

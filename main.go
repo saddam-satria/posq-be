@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/saddam-satria/posq-be/commons"
@@ -41,6 +42,7 @@ func main() {
 	}
 	defer file.Close()
 
+	server.Use(cors.New())
 	server.Use(logger.New(middlewares.GetConfigFile(file)))
 
 	server.Use(recover.New())

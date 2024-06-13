@@ -6,5 +6,5 @@ import (
 )
 
 func UserRoute(route fiber.Router) {
-	route.Get("/auth/me", endpoints.GetUserProfile)
+	route.Post("/auth/me", endpoints.GetUserProfile)
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/saddam-satria/posq-be/services/customer"
 	"github.com/saddam-satria/posq-be/services/order"
 	"github.com/saddam-satria/posq-be/services/product"
+	"github.com/saddam-satria/posq-be/services/report"
 	"github.com/saddam-satria/posq-be/services/user"
 )
 
@@ -19,4 +20,5 @@ func GetRoute(route fiber.Router) {
 	product.ProductRoute(protectedRoute)
 	customer.CustomerRoute(protectedRoute)
 	order.OrderRoute(protectedRoute)
+	report.ReportRoute(protectedRoute)
 }

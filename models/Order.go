@@ -18,7 +18,8 @@ type Order struct {
 	CustomerId       *string `json:"customer_id" gorm:"column:customer_id;type:uuid"`
 	UserCredentialId string  `json:"user_id" gorm:"column:user_credential_id;type:uuid"`
 
-	Products []OrderProduct `json:"items" gorm:"foreignKey:OrderId"`
+	Products        []OrderProduct   `json:"items" gorm:"foreignKey:OrderId"`
+	ProductVariants []ProductVariant `gorm:"many2many:product_variants;joinForeignKey:order_id;joinTableForeignKey:product_variant_id"`
 }
 
 func (o *Order) TableName() string {

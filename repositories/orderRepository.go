@@ -6,7 +6,9 @@ import (
 
 	"github.com/saddam-satria/posq-be/commons"
 	"github.com/saddam-satria/posq-be/domains/apis"
+	"github.com/saddam-satria/posq-be/domains/query"
 	"github.com/saddam-satria/posq-be/models"
+	"gorm.io/gorm"
 )
 
 func Checkout(order *models.Order, response *apis.CheckoutResponse) error {
@@ -39,7 +41,7 @@ func Checkout(order *models.Order, response *apis.CheckoutResponse) error {
 				db.Save(variant)
 			}
 		}
-		totalAmount += variant.BasePrice * float32(order.Products[index].Quantity)
+		totalAmount += variant.SalePrice * float32(order.Products[index].Quantity)
 	}
 
 	if totalAmount > order.Tendered {
@@ -61,4 +63,16 @@ func Checkout(order *models.Order, response *apis.CheckoutResponse) error {
 
 	db.Commit()
 	return nil
+}
+
+func GetOrders(order *[]apis.OrderResponse) {
+	commons.DatabaseConnection.Preload("Products", func(tx *gorm.DB) *gorm.DB {
+		return tx.Joins("JOIN \"productVariant\" AS pv ON pv.\"productVariantId\" = \"orderProduct\".product_variant_id").Joins("JOIN product ON product.\"productId\" = pv.product_id").Select(
+			"\"orderProduct\".*", "pv.name", "pv.\"basePrice\"", "pv.\"salePrice\"", "pv.brand", "pv.stock", "pv.sku", "pv.\"productVariantId\"", "pv.product_id", "product.name AS item_name",
+		)
+	}).Order("\"createdAt\" DESC").Find(&order)
+}
+
+func CountTotalOrderByToday(order *query.CountAggregate) {
+	commons.DatabaseConnection.Model(&models.Order{}).Select("count(*) as total").Where("CAST(\"createdAt\" AS DATE) = CURRENT_DATE").Find(&order)
 }

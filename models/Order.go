@@ -14,6 +14,7 @@ type Order struct {
 	Tendered    float32     `json:"tendered" gorm:"column:tendered;type:decimal(10,2)"`
 	CreatedAt   *time.Time  `json:"order_timestamp" gorm:"default_now();column:createdAt"`
 	UpdatedAt   *time.Time  `json:"-" gorm:"autoUpdateTime:milli;column:updatedAt"`
+	CardNumber  *string     `json:"card_number" gorm:"column:cardNumber;type:varchar(255)"`
 
 	CustomerId       *string `json:"customer_id" gorm:"column:customer_id;type:uuid"`
 	UserCredentialId string  `json:"user_id" gorm:"column:user_credential_id;type:uuid"`

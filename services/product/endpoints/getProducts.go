@@ -39,8 +39,8 @@ func GetProducts(ctx *fiber.Ctx) error {
 			totalPrice = totalPrice + item.BasePrice + item.SalePrice
 		}
 		products[i].Price = totalPrice
-		maxPrice := products[i].ProductVariants[len(products[i].ProductVariants)-1].BasePrice
-		minPrice := products[i].ProductVariants[0].BasePrice
+		maxPrice := products[i].ProductVariants[len(products[i].ProductVariants)-1].SalePrice
+		minPrice := products[i].ProductVariants[0].SalePrice
 		priceRange := fmt.Sprintf("%.0f - %.0f", minPrice, maxPrice)
 
 		if minPrice == maxPrice {

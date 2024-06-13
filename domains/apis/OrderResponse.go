@@ -19,6 +19,7 @@ type OrderProduct struct {
 	OrderId          string    `json:"order_id" gorm:"column:order_id"`
 	ProductVariantId string    `json:"variant_id" gorm:"column:product_variant_id"`
 	ProductName      string    `json:"item_name" gorm:"column:item_name"`
+	SubTotal         float32   `json:"subtotal" gorm:"-"`
 }
 
 type OrderResponse struct {

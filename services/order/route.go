@@ -8,4 +8,5 @@ import (
 func OrderRoute(route fiber.Router) {
 	route.Post("/order", endpoints.Checkout)
 	route.Get("/order/report", endpoints.GetOrders)
+	route.Post("/order/:referenceId/receipt", endpoints.GetReceipt)
 }

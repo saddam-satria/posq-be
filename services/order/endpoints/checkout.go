@@ -85,11 +85,13 @@ func Checkout(ctx *fiber.Ctx) error {
 		CustomerId:       customerId,
 		UserCredentialId: userId,
 		Products:         items,
+		CardNumber:       requestData.CardNumber,
 	}
 
 	var response apis.CheckoutResponse
 
 	if err := repositories.Checkout(&order, &response); err != nil {
+
 		ctx.Status(code).JSON(commons.GetResponse[any](err.Error(), code, nil))
 		return nil
 	}

@@ -26,7 +26,7 @@ func Seed(db *gorm.DB) {
 		ProductVariants: []models.ProductVariant{{
 			Name:      "5 liter",
 			BasePrice: 40000,
-			SalePrice: 10000,
+			SalePrice: 20000,
 			Brand:     "yamalube",
 			Stock:     20,
 			Sku:       "HJG",

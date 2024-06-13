@@ -33,7 +33,8 @@ func main() {
 
 	commons.DatabaseConnection.Debug()
 	server := fiber.New(fiber.Config{
-		ErrorHandler: commons.ErrorHandler,
+		ErrorHandler:  commons.ErrorHandler,
+		StrictRouting: true,
 	})
 	file, err := os.OpenFile("./logs/access.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 
@@ -44,7 +45,7 @@ func main() {
 
 	server.Use(cors.New())
 	server.Use(logger.New(middlewares.GetConfigFile(file)))
-
+	server.Static("/assets", "./public")
 	server.Use(recover.New())
 	router := server.Group("/api/v1", middlewares.BaseMiddleware)
 	utils.GetRoute(router)

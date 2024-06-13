@@ -5,8 +5,8 @@ import "database/sql/driver"
 type PaymentType string
 
 const (
-	CASH PaymentType = "CASH"
-	DEBT PaymentType = "DEBT"
+	CASH PaymentType = "cash"
+	DEBT PaymentType = "debit"
 )
 
 func (ct *PaymentType) Scan(value interface{}) error {

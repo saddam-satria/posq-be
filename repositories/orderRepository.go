@@ -27,6 +27,10 @@ func Checkout(order *models.Order, response *apis.CheckoutResponse) error {
 		return err
 	}
 
+	if len(productVariants) != len(order.Products) {
+		return errors.New("variant not found")
+	}
+
 	totalAmount := float32(0)
 
 	for index, variant := range productVariants {
@@ -61,8 +65,8 @@ func Checkout(order *models.Order, response *apis.CheckoutResponse) error {
 	response.Tendered = order.Tendered
 	response.Total = totalAmount
 
-	db.Commit()
-	return nil
+	return db.Commit().Error
+
 }
 
 func GetOrders(order *[]apis.OrderResponse) {
@@ -71,6 +75,14 @@ func GetOrders(order *[]apis.OrderResponse) {
 			"\"orderProduct\".*", "pv.name", "pv.\"basePrice\"", "pv.\"salePrice\"", "pv.brand", "pv.stock", "pv.sku", "pv.\"productVariantId\"", "pv.product_id", "product.name AS item_name",
 		)
 	}).Order("\"createdAt\" DESC").Find(&order)
+}
+
+func GetOrderReceipt(referenceId string, order *apis.ReceiptResponse) error {
+	return commons.DatabaseConnection.Preload("Products", func(tx *gorm.DB) *gorm.DB {
+		return tx.Joins("JOIN \"productVariant\" AS pv ON pv.\"productVariantId\" = \"orderProduct\".product_variant_id").Joins("JOIN product ON product.\"productId\" = pv.product_id").Select(
+			"\"orderProduct\".*", "pv.name", "pv.\"basePrice\"", "pv.\"salePrice\"", "pv.brand", "pv.stock", "pv.sku", "pv.\"productVariantId\"", "pv.product_id", "product.name AS item_name",
+		)
+	}).Where(&models.Order{ReferenceId: referenceId}).First(&order).Error
 }
 
 func CountTotalOrderByToday(order *query.CountAggregate) {

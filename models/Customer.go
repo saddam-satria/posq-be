@@ -15,7 +15,6 @@ type Customer struct {
 	CreatedAt   *time.Time `json:"-" gorm:"default_now();column:createdAt"`
 	UpdatedAt   *time.Time `json:"-" gorm:"autoUpdateTime:milli;column:updatedAt"`
 	IsDeleted   bool       `json:"-" gorm:"default:false;column:isDeleted"`
-	CardNumber  *string    `json:"card_number" gorm:"column:cardNumber;type:varchar(255);unique"`
 
 	Orders *[]Order `json:"orders" gorm:"foreignKey:CustomerId"`
 }

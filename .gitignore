@@ -1,2 +1,5 @@
 tmp
 .env
+
+logs/access.log
+logs/query.log

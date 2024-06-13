@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/saddam-satria/posq-be/commons"
 	"github.com/saddam-satria/posq-be/middlewares"
@@ -32,14 +34,34 @@ func main() {
 	server := fiber.New(fiber.Config{
 		ErrorHandler: commons.ErrorHandler,
 	})
+	file, err := os.OpenFile("./logs/access.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+
+	if err != nil {
+		os.Create("./logs/access.log")
+	}
+	defer file.Close()
+
+	server.Use(logger.New(middlewares.GetConfigFile(file)))
 
 	server.Use(recover.New())
 	router := server.Group("/api/v1", middlewares.BaseMiddleware)
 	utils.GetRoute(router)
 
-	if err := server.Listen(":" + utils.PORT); err != nil {
-		panic("Failed to run server" + err.Error())
+	runtimeLogMessage := fmt.Sprintf("%s server running on port %s \n", time.Now().Format("2006-01-02 15:04:05"), utils.PORT)
+
+	if utils.GO_DEBUG == "false" {
+		file.WriteString(runtimeLogMessage)
+	} else {
+		fmt.Println(runtimeLogMessage)
 	}
 
-	fmt.Println("server running on port" + utils.PORT)
+	if err := server.Listen(":" + utils.PORT); err != nil {
+		message := "Failed to run server " + err.Error() + "\n"
+		if utils.GO_DEBUG == "false" {
+			file.WriteString(message)
+		} else {
+			fmt.Println(message)
+		}
+		panic("Failed to run server" + err.Error())
+	}
 }

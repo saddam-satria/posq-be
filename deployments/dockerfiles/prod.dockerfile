@@ -20,7 +20,7 @@ COPY services ./services
 
 COPY utils ./utils  
 
-COPY main.go migrate.go seed.go./
+COPY main.go migrate.go seed.go ./
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o dist/main .
 
@@ -28,6 +28,6 @@ FROM alpine:latest
 
 WORKDIR /app/posq-be 
 
-COPY --from=builder /app/go-boilerplate/dist ./dist
+COPY --from=builder /app/posq-be/dist ./dist
 
 CMD ["./dist/main"]

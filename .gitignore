@@ -3,3 +3,4 @@ tmp
 
 logs/access.log
 logs/query.log
+container.yaml

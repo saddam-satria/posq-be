@@ -22,6 +22,6 @@ COPY services ./services
 
 COPY utils ./utils  
 
-COPY main.go .air.toml migrate.go seed.go./
+COPY main.go .air.toml migrate.go seed.go ./
 
 CMD [ "air", "-c", ".air.toml" ]
